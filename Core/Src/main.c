@@ -33,7 +33,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define NUMBER_OF_SAMPLES	2
+#define NUMBER_OF_SAMPLES	4
 #define BUFFER_SAMPLES		NUMBER_OF_SAMPLES * 2
 #define ADC_DEFAULT_VALUE	0xAAAA
 /* USER CODE END PD */
