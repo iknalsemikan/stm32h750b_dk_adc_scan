@@ -127,7 +127,9 @@ static void MX_TIM2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint16_t adc_buffer[BUFFER_SAMPLES] = {};
+//uint32_t adc_buffer[BUFFER_SAMPLES];
+ALIGN_32BYTES(static uint32_t adc_buffer[BUFFER_SAMPLES]) __attribute__((section(".buf_data_d3"))); // The ADC DMA can only communicate with the D3 SRAM, that's why it's allocated this way
+//uint16_t adc_buffer[BUFFER_SAMPLES] = {};
 /* USER CODE END 0 */
 
 /**
@@ -204,7 +206,7 @@ int main(void)
   }
 
   /*Start DMA transfers*/
-  if(HAL_ADC_Start_DMA(&hadc3, (uint32_t*)&adc_buffer, BUFFER_SAMPLES * 4) != HAL_OK)
+  if(HAL_ADC_Start_DMA(&hadc3, &adc_buffer, BUFFER_SAMPLES) != HAL_OK)
   {
 	  Error_Handler();
   }

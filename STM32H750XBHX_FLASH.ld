@@ -161,6 +161,14 @@ SECTIONS
     . = ALIGN(8);
   } >RAM
 
+  .buf_data_d3 (NOLOAD) :
+  {
+    . = ALIGN(32);
+    *(.buf_data_d3)       /* .buf_data_d3 section */
+    . = ALIGN(32);
+    _fast_heap_d3 = .;    /* Put imalloc/ifree heap after the buf_data_d3 section */
+  } >RAM_D3
+
   /* Remove information from the standard libraries */
   /DISCARD/ :
   {
