@@ -27,7 +27,9 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN TD */
-
+uint32_t adc3_interrput_counter = 0;
+uint32_t tim2_interrput_counter = 0;
+uint32_t dma1_stream0_interrput_counter = 0;
 /* USER CODE END TD */
 
 /* Private define ------------------------------------------------------------*/
@@ -211,7 +213,9 @@ void DMA1_Stream0_IRQHandler(void)
   /* USER CODE END DMA1_Stream0_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_adc3);
   /* USER CODE BEGIN DMA1_Stream0_IRQn 1 */
-
+  dma1_stream0_interrput_counter++;
+  /* Toggle Green LED*/
+  HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
   /* USER CODE END DMA1_Stream0_IRQn 1 */
 }
 
@@ -225,7 +229,9 @@ void TIM2_IRQHandler(void)
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
   /* USER CODE BEGIN TIM2_IRQn 1 */
-
+  tim2_interrput_counter++;
+  /* Toggle Red LED*/
+  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
   /* USER CODE END TIM2_IRQn 1 */
 }
 
@@ -239,7 +245,7 @@ void ADC3_IRQHandler(void)
   /* USER CODE END ADC3_IRQn 0 */
   HAL_ADC_IRQHandler(&hadc3);
   /* USER CODE BEGIN ADC3_IRQn 1 */
-
+  adc3_interrput_counter++;
   /* USER CODE END ADC3_IRQn 1 */
 }
 
