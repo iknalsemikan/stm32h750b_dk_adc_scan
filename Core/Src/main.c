@@ -127,7 +127,8 @@ static void MX_TIM2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint16_t adc_buffer[BUFFER_SAMPLES] = {};
+uint32_t adc_buffer[BUFFER_SAMPLES];
+//uint16_t adc_buffer[BUFFER_SAMPLES] = {};
 /* USER CODE END 0 */
 
 /**
@@ -204,7 +205,7 @@ int main(void)
   }
 
   /*Start DMA transfers*/
-  if(HAL_ADC_Start_DMA(&hadc3, (uint32_t*)&adc_buffer, BUFFER_SAMPLES * 4) != HAL_OK)
+  if(HAL_ADC_Start_DMA(&hadc3, adc_buffer, BUFFER_SAMPLES) != HAL_OK)
   {
 	  Error_Handler();
   }
