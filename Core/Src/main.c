@@ -33,6 +33,9 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define NUMBER_OF_SAMPLES	4
+#define BUFFER_SAMPLES		NUMBER_OF_SAMPLES * 2
+#define ADC_DEFAULT_VALUE	0xAAAA
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -124,7 +127,7 @@ static void MX_TIM2_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+uint16_t adc_buffer[BUFFER_SAMPLES] = {};
 /* USER CODE END 0 */
 
 /**
@@ -176,6 +179,41 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
+  /* Set the buffer with a known value*/
+  for(uint32_t i = 0; i< BUFFER_SAMPLES; i++)
+  {
+	  adc_buffer[i] = ADC_DEFAULT_VALUE;
+  }
+
+  /*Turn off Red LED*/
+  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+
+  /*Turn off Green LED*/
+  HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_SET);
+
+  /*ADC Offset Calibration*/
+  if(HAL_ADCEx_Calibration_Start(&hadc3, ADC_CALIB_OFFSET, ADC_SINGLE_ENDED) != HAL_OK)
+  {
+	  Error_Handler();
+  }
+
+  /*ADC Linearity Calibration*/
+  if(HAL_ADCEx_Calibration_Start(&hadc3, ADC_CALIB_OFFSET_LINEARITY, ADC_SINGLE_ENDED) != HAL_OK)
+  {
+	  Error_Handler();
+  }
+
+  /*Start DMA transfers*/
+  if(HAL_ADC_Start_DMA(&hadc3, (uint32_t*)&adc_buffer, BUFFER_SAMPLES) != HAL_OK)
+  {
+	  Error_Handler();
+  }
+
+  /* Start timer 2 and therefore start the ADC3 sampling*/
+  if(HAL_TIM_Base_Start_IT(&htim2) != HAL_OK)
+  {
+	  Error_Handler();
+  }
   /* USER CODE END 2 */
 
   /* Infinite loop */
